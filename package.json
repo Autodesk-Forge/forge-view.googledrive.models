@@ -1,0 +1,33 @@
+{
+  "name": "model.derivative-nodejs-box.viewer",
+  "version": "1.0.0",
+  "description": "Transparent use of Model Derivative to view Box compatible files.",
+  "dependencies": {
+    "body-parser": "*",
+    "bootstrap": "*",
+    "cookie-parser": "*",
+    "express": "*",
+    "express-session": "*",
+    "forge-data-management": "*",
+    "forge-model-derivative": "*",
+    "forge-oauth2": "*",
+    "forge-oss": "*",
+    "googleapis": "*",
+    "jquery": "*",
+    "jstree": "*",
+    "moment": "*",
+    "request": "*",
+    "serve-favicon": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/autodesk-forge/model.derivative-nodejs-box.viewer"
+  },
+  "scripts": {
+    "start": "NODE_ENV=production node start.js",
+    "dev": "node start.js",
+    "nodemon": "nodemon start.js --ignore www/"
+  },
+  "author": "Augusto Goncalves (Forge Partner Development)",
+  "license": "MIT"
+}

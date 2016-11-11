@@ -1,0 +1,33 @@
+{
+  "name": "model.derivative-gdrive.viewer",
+  "description": "Transparent use of Model Derivative to view Box compatible files.",
+  "repository": "https://github.com/autodesk-forge/model.derivative-nodejs-google.drive.viewer",
+  "logo": "https://avatars0.githubusercontent.com/u/8017462?v=3&s=200",
+  "keywords": [
+    "express",
+    "framework",
+    "autodesk",
+    "forge",
+    "template"
+  ],
+  "env": {
+    "FORGE_CLIENT_ID": {
+      "description": "Forge Client ID"
+    },
+    "FORGE_CLIENT_SECRET": {
+      "description": "Forge Client Secret"
+    },
+    "GOOGLE_CLIENT_ID": {
+      "description": "Google Client ID"
+    },
+    "GOOGLE_CLIENT_SECRET": {
+      "description": "Google Client Secret"
+    },
+    "GOOGLE_CALLBACK_URL": {
+      "description": "Redirect URI of your Google app, required for 3-legged OAuth",
+      "value": "https://<<YOUR HEROKU APP NAME HERE>>.herokuapp.com/api/google/callback/oauth"
+    }
+  },
+  "website": "https://developer.autodesk.com/",
+  "success_url": "/"
+}
