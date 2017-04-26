@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Forge Partner Development
+// Written by ForgeSDK Partner Development
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted,
@@ -16,52 +16,47 @@
 // UNINTERRUPTED OR ERROR FREE.
 /////////////////////////////////////////////////////////////////////
 
-function launchViewer(div, urn) {
-  console.log("Launching Autodesk Viewer for: " + urn);
+// This script file is based on the tutorial:
+// https://developer.autodesk.com/en/docs/viewer/v2/tutorials/basic-application/
+
+var viewerApp;
+
+function launchViewer(viewerDiv, urn) {
   var options = {
-    'document': 'urn:' + urn,
-    'env': 'AutodeskProduction',
-    'getAccessToken': getForgeToken,
-    'refreshToken': getForgeToken
+    env: 'AutodeskProduction',
+    getAccessToken: getForgeToken
   };
-
-  var viewerElement = document.getElementById(div);
-  viewer = new Autodesk.Viewing.Private.GuiViewer3D(viewerElement, {});
-  Autodesk.Viewing.Initializer(
-    options,
-    function () {
-      viewer.initialize();
-      loadDocument(options.document);
-    }
-  );
+  var documentId = 'urn:' + urn;
+  if (viewerApp==null) {
+    Autodesk.Viewing.Initializer(options, function onInitialized() {
+      viewerApp = new Autodesk.Viewing.ViewingApplication(viewerDiv);
+      viewerApp.registerViewer(viewerApp.k3D, Autodesk.Viewing.Private.GuiViewer3D);
+      viewerApp.loadDocument(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
+    });
+  }
+  else
+    viewerApp.loadDocument(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
 }
 
-function loadDocument(documentId){
-  var oauth3legtoken = getForgeToken();
+var viewer;
 
-  Autodesk.Viewing.Document.load(
-    documentId,
-    function (doc) { // onLoadCallback
-      geometryItems = Autodesk.Viewing.Document.getSubItemsWithProperties(doc.getRootItem(), {
-        'type': 'geometry',
-      }, true);
-      if (geometryItems.length > 0) {
-        geometryItems.forEach(function (item, index) {
-          /*
-          // WIP, show viewables
-          var v = $('<input type="button" value="' + item.name + '" class="btn btn-primary btn-xs"/>&nbsp;');
-          v.click(function () {
-            viewer.impl.unloadCurrentModel();
-            viewer.load(doc.getViewablePath(geometryItems[index]));
-          });
-          $('#viewables').append(v);
-          */
-        });
-        viewer.load(doc.getViewablePath(geometryItems[0])); // show 1st view on this document...
-      }
-    },
-    function (errorMsg) { // onErrorCallback
-      console.log(errorMsg);
-    }
-  )
+function onDocumentLoadSuccess(doc) {
+
+  // We could still make use of Document.getSubItemsWithProperties()
+  // However, when using a ViewingApplication, we have access to the **bubble** attribute,
+  // which references the root node of a graph that wraps each object from the Manifest JSON.
+  var viewables = viewerApp.bubble.search({ 'type': 'geometry' });
+  if (viewables.length === 0) {
+    console.error('Document contains no viewables.');
+    return;
+  }
+
+  // Choose any of the avialble viewables
+  viewerApp.selectItem(viewables[0].data, onItemLoadSuccess, onItemLoadFail);
 }
+
+function onDocumentLoadFailure(viewerErrorCode) {}
+
+function onItemLoadSuccess(viewer, item) {}
+
+function onItemLoadFail(errorCode) {}

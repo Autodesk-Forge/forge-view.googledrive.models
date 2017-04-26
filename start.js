@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Forge Partner Development
+// Written by ForgeSDK Partner Development
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted,
@@ -23,7 +23,7 @@ var app = require('./server/server');
 // start server
 var server = app.listen(app.get('port'), function () {
   if (process.env.FORGE_CLIENT_ID == null || process.env.FORGE_CLIENT_SECRET == null)
-    console.log('*****************\nWARNING: Forge Client ID & Client Secret not defined as environment variables.\n*****************');
+    console.log('*****************\nWARNING: ForgeSDK Client ID & Client Secret not defined as environment variables.\n*****************');
 
   if (process.env.GOOGLE_CLIENT_ID == null || process.env.GOOGLE_CLIENT_SECRET == null)
     console.log('*****************\nWARNING: Box Client ID & Client Secret not defined as environment variables.\n*****************');

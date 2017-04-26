@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Forge Partner Development 
+// Written by ForgeSDK Partner Development
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted,
@@ -20,7 +20,7 @@
 
 module.exports = {
 
-  // Autodesk Forge configuration
+  // Autodesk ForgeSDK configuration
 
   // this this callback URL when creating your client ID and secret
   callbackURL: process.env.FORGE_CALLBACK_URL || 'http://localhost:3000/api/forge/callback/oauth',
@@ -32,9 +32,9 @@ module.exports = {
   },
 
   // Required scopes for your application on server-side
-  scopeInternal: 'data:read data:write data:create data:search bucket:create bucket:read bucket:update bucket:delete',
+  scopeInternal: ['data:read', 'data:write', 'data:create', 'data:search', 'bucket:create', 'bucket:read', 'bucket:update', 'bucket:delete'],
   // Required scope of the token sent to the client
-  scopePublic: 'data:read',
+  scopePublic: ['data:read'],
 
   // google configuration
   google: {

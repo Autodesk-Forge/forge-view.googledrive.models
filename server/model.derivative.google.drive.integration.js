@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Forge Partner Development
+// Written by ForgeSDK Partner Development
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted,
@@ -36,8 +36,7 @@ var OAuth2 = google.auth.OAuth2;
 var oauth2Client = new OAuth2(config.google.credentials.client_id, config.google.credentials.client_secret, config.google.callbackURL);
 
 // forge
-var ForgeModelDerivative = require('forge-model-derivative');
-var ForgeOSS = require('forge-oss');
+var ForgeSDK = require('forge-apis');
 
 var fs = require('fs');
 var request = require('request');
@@ -61,26 +60,17 @@ router.post('/integration/sendToTranslation', jsonParser, function (req, res) {
         return;
       }
 
-      // Forge OSS Bucket Name: username + userId (no spaces, lower case)
+      // ForgeSDK OSS Bucket Name: username + userId (no spaces, lower case)
       // that way we have one bucket for each Google account using this application
       var ossBucketKey = (user.displayName.replace(/\W+/g, '') + user.id).toLowerCase();
 
-      var ossClient = ForgeOSS.ApiClient.instance;
-      var ossOAuth = ossClient.authentications ['oauth2_application']; // not the 'oauth2_access_code', as per documentation
-      ossOAuth.accessToken = tokenInternal;
-      var buckets = new ForgeOSS.BucketsApi();
-      var objects = new ForgeOSS.ObjectsApi();
-      var postBuckets = new ForgeOSS.PostBucketsPayload();
+      var buckets = new ForgeSDK.BucketsApi();
+      var objects = new ForgeSDK.ObjectsApi();
+      var postBuckets = new ForgeSDK.PostBucketsPayload();
       postBuckets.bucketKey = ossBucketKey;
       postBuckets.policyKey = "transient"; // expires in 24h
 
-      buckets.createBucket(postBuckets, null, function (err, data, response) {
-        if (response.statusCode != 200 && response.statusCode != 409 /*bucket already exists*/) {
-          console.log('Error creating bucket ' + ossBucketKey + ' ' + response.statusCode);
-          res.status(response.statusCode).json({error: "Cannot translate: Create Bucket " + response.statusMessage});
-          return;
-        }
-
+      buckets.createBucket(postBuckets, {}, null, tokenInternal).catch(function (err) {console.log(err);}).then(function () {
         // need the Google file information to get the name...
         drive.files.get({
           fileId: googleFileId
@@ -89,10 +79,10 @@ router.post('/integration/sendToTranslation', jsonParser, function (req, res) {
           var ossObjectName = googleFileId + '.' + re.exec(fileName)[1]; // googleId + fileExtension (required)
 
           // at this point the bucket exists (either created or already there)
-          objects.getObjects(ossBucketKey, null).then(function (objectsInBucket) {
+          objects.getObjects(ossBucketKey, {'limit': 100}, null, tokenInternal).then(function (response) {
             var alreadyTranslated = false;
-
-            objectsInBucket.items.forEach(function (item) {
+            var objectsInBucket = response.body.items;
+            objectsInBucket.forEach(function (item) {
               if (item.objectKey === ossObjectName) {
                 res.status(200).json({
                   readyToShow: true,
@@ -112,8 +102,8 @@ router.post('/integration/sendToTranslation', jsonParser, function (req, res) {
                // working, so for now using the request equivalent
                // https://developers.google.com/drive/v3/web/manage-downloads
                drive.files.get({
-                  fileId: googleFileId,
-                  alt: 'media'
+               fileId: googleFileId,
+               alt: 'media'
                }
                */
 
@@ -126,45 +116,22 @@ router.post('/integration/sendToTranslation', jsonParser, function (req, res) {
                 encoding: null
               }, function (error, response, filestream) {
 
-                //var defaultOSSClient = ForgeOSS.ApiClient.instance;
-                //var oauthOSS = defaultOSSClient.authentications ['oauth2_application']; // not the 'oauth2_access_code', as per documentation
-                //oauthOSS.accessToken = tokenSession.getTokenInternal();
-                //var objects = new ForgeOSS.ObjectsApi();
-
-                // this request should be done via ObjectsApi.uploadObject call
-                // but it's missing the header, so using this workaround for now
-
-                // upload to Forge OSS
-                var mineType = getMineType(ossObjectName);
-                request({
-                  url: 'https://developer.api.autodesk.com/oss/v2/buckets/' + ossBucketKey + '/objects/' + ossObjectName,
-                  method: "PUT",
-                  headers: {
-                    'Authorization': 'Bearer ' + tokenInternal,
-                    'Content-Type': mineType
-                  },
-                  body: filestream
-                }, function (error, response, body) {
-
-                  // now translate to SVF (Forge Viewer format)
-                  var ossUrn = JSON.parse(body).objectId.toBase64();
-
-                  var mdClient = ForgeModelDerivative.ApiClient.instance;
-                  var mdOAuth = mdClient.authentications ['oauth2_access_code'];
-                  mdOAuth.accessToken = tokenInternal;
-
-                  var derivative = new ForgeModelDerivative.DerivativesApi();
-                  derivative.translate(translateData(ossUrn), null).then(function (data) {
+                objects.uploadObject(ossBucketKey, ossObjectName, filestream.length, filestream, {}, null, tokenInternal).then(function (response) {
+                  var ossUrn = response.body.objectId.toBase64();
+                  var derivative = new ForgeSDK.DerivativesApi();
+                  derivative.translate(translateData(ossUrn), {}, null, tokenInternal).then(function (data) {
                     res.status(200).json({
                       readyToShow: false,
                       status: 'Translation in progress, please wait...',
                       urn: ossUrn
                     });
-                  }).catch(function (e) { res.status(500).json({error: e.error.body}) });
-                });//);
+                  }).catch(function (e) { res.status(500).json({error: e.statusMessage}) }); // translate
+
+                }).catch(function (err) { console.log(err); }); //uploadObject
+
               });
             }
-          }).catch(function (e) { res.status(500).json({error: e.error.body}); });
+          }).catch(function (e) { res.status(500).json({error: e.statusMessage}); }); //getObjects
         });
       });
     });
@@ -176,12 +143,9 @@ router.post('/integration/isReadyToShow', jsonParser, function (req, res) {
 
   var tokenSession = new token(req.session);
   tokenSession.getTokenInternal(function (tokenInternal) {
-    var mdClient = ForgeModelDerivative.ApiClient.instance;
-    var mdOAuth = mdClient.authentications ['oauth2_access_code'];
-    mdOAuth.accessToken = tokenInternal;
-
-    var derivative = new ForgeModelDerivative.DerivativesApi();
-    derivative.getManifest(ossUrn, null).then(function (manifest) {
+    var derivative = new ForgeSDK.DerivativesApi();
+    derivative.getManifest(ossUrn, {}, null, tokenInternal).then(function (response) {
+      var manifest = response.body;
       if (manifest.status === 'success') {
         res.status(200).json({
           readyToShow: true,
@@ -196,7 +160,7 @@ router.post('/integration/isReadyToShow', jsonParser, function (req, res) {
           urn: ossUrn
         });
       }
-    }).catch(function (e) { res.status(500).json({error: e.error.body}); });;
+    }).catch(function (e) { res.status(500).json({error: e.error.body}); });
   });
 });
 
@@ -206,19 +170,19 @@ String.prototype.toBase64 = function () {
 
 function translateData(ossUrn) {
   var postJob =
-  {
-    input: {
-      urn: ossUrn
-    },
-    output: {
-      formats: [
-        {
-          type: "svf",
-          views: ["2d", "3d"]
-        }
-      ]
-    }
-  };
+    {
+      input: {
+        urn: ossUrn
+      },
+      output: {
+        formats: [
+          {
+            type: "svf",
+            views: ["2d", "3d"]
+          }
+        ]
+      }
+    };
   return postJob;
 }
 

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Forge Partner Development
+// Written by ForgeSDK Partner Development
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted,
@@ -30,7 +30,7 @@ var router = express.Router();
 router.get('/oauth/token', function (req, res) {
   var tokenSession = new token(req.session);
   tokenSession.getTokenPublic(function(publicToken){
-    res.end(publicToken);  
+    res.status(200).json(publicToken);
   });
 
 });

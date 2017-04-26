@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Forge Partner Development
+// Written by ForgeSDK Partner Development
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted,
@@ -48,7 +48,7 @@ function isGoogleAuthorized() {
     success: function (res) {
       ret = res;
     },
-    async: false // this request must be synchronous for the Forge Viewer
+    async: false // this request must be synchronous for the ForgeSDK Viewer
   });
   return (ret === 'true');
 }

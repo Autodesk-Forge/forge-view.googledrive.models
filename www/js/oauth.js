@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
-// Written by Forge Partner Development
+// Written by ForgeSDK Partner Development
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted,
@@ -16,15 +16,13 @@
 // UNINTERRUPTED OR ERROR FREE.
 /////////////////////////////////////////////////////////////////////
 
-function getForgeToken() {
-  var token = '';
+function getForgeToken(callback) {
   jQuery.ajax({
     url: '/oauth/token',
-    success: function (res) {
-      token = res;
-    },
-    async: false // this request must be synchronous for the Forge Viewer
+    success: function (oauth) {
+      if (oauth.access_token != '') console.log('2 legged token (App level public token): ' + oauth.access_token); // debug
+      if (callback)
+        callback(oauth.access_token, oauth.expires_in);
+    }
   });
-  if (token != '') console.log('2 legged token (App level public token): ' + token); // debug
-  return token;
 }
