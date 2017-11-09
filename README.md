@@ -13,7 +13,7 @@
 
 This sample use [Model Derivative API](https://developer.autodesk.com/en/docs/model-derivative/v2/overview/) to translate [Google Drive](https://drive.google.com) files into [Viewer](https://developer.autodesk.com/en/docs/viewer/v2/overview/). The front-end will look like:
   
-![](www/img/indexpage.png)
+![thumbnail](www/img/indexpage.png)
 
 ## Live version
 
