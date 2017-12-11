@@ -19,44 +19,75 @@
 // This script file is based on the tutorial:
 // https://developer.autodesk.com/en/docs/viewer/v2/tutorials/basic-application/
 
-var viewerApp;
+var viewer;
+var lmvDoc;
 
-function launchViewer(viewerDiv, urn) {
+function launchViewer(urn) {
   var options = {
     env: 'AutodeskProduction',
     getAccessToken: getForgeToken
   };
   var documentId = 'urn:' + urn;
-  if (viewerApp==null) {
+  if (viewer == null) {
     Autodesk.Viewing.Initializer(options, function onInitialized() {
-      viewerApp = new Autodesk.Viewing.ViewingApplication(viewerDiv);
-      viewerApp.registerViewer(viewerApp.k3D, Autodesk.Viewing.Private.GuiViewer3D);
-      viewerApp.loadDocument(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
+      // Create Viewer instance and load model.
+      var viewerDiv = document.getElementById('forgeViewer');
+      viewer = new Autodesk.Viewing.Private.GuiViewer3D(viewerDiv);
+      var errorCode = viewer.start();
+
+      // Check for initialization errors.
+      if (errorCode) {
+        console.error('viewer.start() error - errorCode:' + errorCode);
+        return;
+      }
+
+      Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
     });
   }
-  else
-    viewerApp.loadDocument(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
+  else {
+    Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
+  }
 }
 
-var viewer;
-
+/**
+ * Autodesk.Viewing.Document.load() success callback.
+ * Proceeds with model initialization.
+ */
 function onDocumentLoadSuccess(doc) {
-
-  // We could still make use of Document.getSubItemsWithProperties()
-  // However, when using a ViewingApplication, we have access to the **bubble** attribute,
-  // which references the root node of a graph that wraps each object from the Manifest JSON.
-  var viewables = viewerApp.bubble.search({ 'type': 'geometry' });
+  // A document contains references to 3D and 2D viewables.
+  var viewables = Autodesk.Viewing.Document.getSubItemsWithProperties(doc.getRootItem(), {'type': 'geometry'}, true);
   if (viewables.length === 0) {
     console.error('Document contains no viewables.');
     return;
   }
 
-  // Choose any of the avialble viewables
-  viewerApp.selectItem(viewables[0].data, onItemLoadSuccess, onItemLoadFail);
+  var initialViewable = viewables[0];
+  var svfUrl = doc.getViewablePath(initialViewable);
+  var modelOptions = {
+    sharedPropertyDbPath: doc.getPropertyDbPath()
+  };
+  viewer.loadModel(svfUrl, modelOptions, onLoadModelSuccess, onLoadModelError);
 }
 
+/**
+ * Autodesk.Viewing.Document.load() failuire callback.
+ */
 function onDocumentLoadFailure(viewerErrorCode) {}
 
-function onItemLoadSuccess(viewer, item) {}
+/**
+ * viewer.loadModel() success callback.
+ * Invoked after the model's SVF has been initially loaded.
+ * It may trigger before any geometry has been downloaded and displayed on-screen.
+ */
+var models = [];
+function onLoadModelSuccess(model) {
+  models.push(model);
+  if (models.length==2)
+    viewer.loadExtension('Autodesk.Forge.Samples.VersionChanges', {'modelA': models[0], 'modelB': models[1]});
+}
 
-function onItemLoadFail(errorCode) {}
+/**
+ * viewer.loadModel() failure callback.
+ * Invoked when there's an error fetching the SVF file.
+ */
+function onLoadModelError(viewerErrorCode) {}

@@ -9,7 +9,7 @@
     "express": "*",
     "express-session": "*",
     "forge-apis": "*",
-    "googleapis": "*",
+    "googleapis": "19.0.0",
     "jquery": "*",
     "jstree": "*",
     "moment": "*",

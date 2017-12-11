@@ -117,7 +117,7 @@ function translateFile(googleNode) {
       success: function (res) {
         $.notify(res.status + (res.readyToShow ? ' Launching viewer.' : ''), 'info');
         if (res.readyToShow)
-          launchViewer('forgeViewer', res.urn); // ready to show! launch viewer
+          launchViewer(res.urn); // ready to show! launch viewer
         else
           wait(res.urn); // not ready to show... wait 5 seconds
       },
@@ -143,7 +143,7 @@ function wait(urn) {
       success: function (res) {
         if (res.readyToShow) {
           $.notify('Ready! Launching viewer.', 'info');
-          launchViewer('forgeViewer', res.urn);
+          launchViewer(res.urn);
         }
         else {
           $.notify(res.status, 'warn');
