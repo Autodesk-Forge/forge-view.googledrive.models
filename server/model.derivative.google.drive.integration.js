@@ -62,7 +62,7 @@ router.post('/integration/sendToTranslation', jsonParser, function (req, res) {
 
       // ForgeSDK OSS Bucket Name: username + userId (no spaces, lower case)
       // that way we have one bucket for each Google account using this application
-      var ossBucketKey = (user.displayName.replace(/\W+/g, '') + user.id).toLowerCase();
+      var ossBucketKey = config.credentials.client_id.toLowerCase() + (user.displayName.replace(/\W+/g, '') + user.id).toLowerCase();
 
       var buckets = new ForgeSDK.BucketsApi();
       var objects = new ForgeSDK.ObjectsApi();
