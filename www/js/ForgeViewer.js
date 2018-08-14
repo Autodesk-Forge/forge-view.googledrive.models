@@ -22,6 +22,17 @@
 
 var viewerApp;
 
+function getForgeToken(callback) {
+  jQuery.ajax({
+    url: '/oauth/token',
+    success: function (oauth) {
+      if (oauth.access_token != '') console.log('2 legged token (App level public token): ' + oauth.access_token); // debug
+      if (callback)
+        callback(oauth.access_token, oauth.expires_in);
+    }
+  });
+}
+
 function launchViewer(urn) {
   var options = {
     env: 'AutodeskProduction',
