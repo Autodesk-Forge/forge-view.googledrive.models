@@ -8,7 +8,7 @@
     "cookie-parser": "*",
     "express": "*",
     "express-session": "*",
-    "forge-apis": "0.4.1",
+    "forge-apis": "0.4.3",
     "googleapis": "19.0.0",
     "jquery": "3.2.1",
     "jstree": "3.3.4",
@@ -25,6 +25,6 @@
     "dev": "node start.js",
     "nodemon": "nodemon start.js --ignore www/"
   },
-  "author": "Augusto Goncalves (Forge Partner Development)",
+  "author": "Vadym Kuzin (Forge Partner Development)",
   "license": "MIT"
 }

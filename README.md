@@ -8,17 +8,17 @@
 [![oAuth2](https://img.shields.io/badge/oAuth2-v1-green.svg)](http://developer.autodesk.com/)
 [![OSS](https://img.shields.io/badge/OSS-v2-green.svg)](http://developer.autodesk.com/)
 [![Model-Derivative](https://img.shields.io/badge/Model%20Derivative-v2-green.svg)](http://developer.autodesk.com/)
-[![Viewer](https://img.shields.io/badge/Viewer-v5.0-green.svg)](http://developer.autodesk.com/)
+[![Viewer](https://img.shields.io/badge/Viewer-v6.0-green.svg)](http://developer.autodesk.com/)
 
 # Description
 
 This sample use [Model Derivative API](https://developer.autodesk.com/en/docs/model-derivative/v2/overview/) to translate [Google Drive](https://drive.google.com) files into [Viewer](https://developer.autodesk.com/en/docs/viewer/v2/overview/). The front-end will look like:
-  
+
 ![thumbnail](www/img/indexpage.png)
 
 ## Live version
 
-See it live at [forgegoogledriveviewer.herokuapp.com](http://forgegoogledriveviewer.herokuapp.com/). 
+See it live at [forgegoogledriveviewer.herokuapp.com](http://forgegoogledriveviewer.herokuapp.com/).
 
 # Setup
 
