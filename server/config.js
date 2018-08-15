@@ -40,8 +40,8 @@ module.exports = {
   google: {
     callbackURL: process.env.GOOGLE_CALLBACK_URL || 'http://localhost:3000/api/google/callback/oauth',
     credentials: {
-      client_id: process.env.GOOGLE_CLIENT_ID || '<replace with your box client id',
-      client_secret: process.env.GOOGLE_CLIENT_SECRET || '<replace with your box client secret'
+      client_id: process.env.GOOGLE_CLIENT_ID || '<replace with your box client id>',
+      client_secret: process.env.GOOGLE_CLIENT_SECRET || '<replace with your box client secret>'
     }
   }
 };
