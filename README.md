@@ -61,24 +61,6 @@ Windows (use <b>Node.js command line</b> from Start menu)
     set GOOGLE_CLIENT_SECRET=<<YOUR GOOGLE CLIENT SECRET>>
     npm run dev
 
-Manually (use <b>config.js</b> file in <b>server</b>(by default) folder)
-
-    ```
-    callbackURL: process.env.FORGE_CALLBACK_URL || 'http://localhost:3000/api/forge/callback/oauth',
-    credentials: {
-        client_id: process.env.FORGE_CLIENT_ID || '<replace with your consumer id>',
-        client_secret: process.env.FORGE_CLIENT_SECRET || '<replace with your consumer secret>',
-    },
-    ...
-    google: {
-        callbackURL: process.env.GOOGLE_CALLBACK_URL || 'http://localhost:3000/api/google/callback/oauth',
-        credentials: {
-            client_id: process.env.GOOGLE_CLIENT_ID || '<replace with your box client id',
-            client_secret: process.env.GOOGLE_CLIENT_SECRET || '<replace with your box client secret'
-        }
-    }
-    ```
-
 Open the browser: [http://localhost:3000](http://localhost:3000).
 
 <b>Important:</b> do not use <b>npm start</b> locally, this is intended for PRODUCTION only with HTTPS (SSL) secure cookies.
