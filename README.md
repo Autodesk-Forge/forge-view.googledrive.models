@@ -24,7 +24,13 @@ See it live at [forgegoogledriveviewer.herokuapp.com](http://forgegoogledrivevie
 
 For using this sample, you need an Autodesk developer credentials. Visit the [Forge Developer Portal](https://developer.autodesk.com), sign up for an account, then [create an app](https://developer.autodesk.com/myapps/create). For this new app, use <b>http://localhost:3000/api/forge/callback/oauth</b> as Callback URL. Finally take note of the <b>Client ID</b> and <b>Client Secret</b>.
 
-You also need a Google Developer credentials. Visit the [Google APIs Console](https://console.developers.google.com), Log in or Sign up, follow the steps to Create a Credential. For this new app, use <b>http://localhost:3000/api/google/callback/oauth</b> as redirect_uri. Make sure you activate **Google Drive** & **Google People** APIs, this sample uses both scopes. Finally, take note of the <b>client_id</b> and <b>client_secret</b>.
+You also need a Google Developer credentials:
+1. Visit the [Google APIs Console](https://console.developers.google.com)
+2. Log in or Sign up
+3. Choose OAuth client ID in Create Credentials menu
+4. Select 'Web application' (default option)
+5. Apply <b>http://localhost:3000/api/google/callback/oauth</b> to Authorised redirect URIs field (development option)
+6. Make sure you activate **Google Drive** & **Google People** APIs, this sample uses both scopes. Finally, take note of the    <b>client_id</b> and <b>client_secret</b>.
 
 ### Run locally
 
@@ -34,7 +40,8 @@ Clone this project or download it. It's recommended to install [GitHub desktop](
 
     git clone https://github.com/autodesk-forge/model.derivative-nodejs-google.drive.viewer
 
-To run it, install the required packages, set the enviroment variables with your client ID & secret and finally start it. Via command line, navigate to the folder where this repository was cloned and use the following:
+#### Enviroment variables
+To run it, after installation of required packages, you sould set the enviroment variables with your client ID & secret and finally start it. Via command line, navigate to the folder where this repository was cloned and use the following:
 
 Mac OSX/Linux (Terminal)
 
@@ -53,6 +60,24 @@ Windows (use <b>Node.js command line</b> from Start menu)
     set GOOGLE_CLIENT_ID=<<YOUR CLIENT ID FROM GOOGLE DEVELOPER>>
     set GOOGLE_CLIENT_SECRET=<<YOUR GOOGLE CLIENT SECRET>>
     npm run dev
+
+Manually (use <b>config.js</b> file in <b>server</b>(by default) folder)
+
+    ```
+    callbackURL: process.env.FORGE_CALLBACK_URL || 'http://localhost:3000/api/forge/callback/oauth',
+    credentials: {
+        client_id: process.env.FORGE_CLIENT_ID || '<replace with your consumer id>',
+        client_secret: process.env.FORGE_CLIENT_SECRET || '<replace with your consumer secret>',
+    },
+    ...
+    google: {
+        callbackURL: process.env.GOOGLE_CALLBACK_URL || 'http://localhost:3000/api/google/callback/oauth',
+        credentials: {
+            client_id: process.env.GOOGLE_CLIENT_ID || '<replace with your box client id',
+            client_secret: process.env.GOOGLE_CLIENT_SECRET || '<replace with your box client secret'
+        }
+    }
+    ```
 
 Open the browser: [http://localhost:3000](http://localhost:3000).
 
