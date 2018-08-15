@@ -29,7 +29,7 @@ You also need a Google Developer credentials:
 2. Log in or Sign up
 3. Choose OAuth client ID in Create Credentials menu
 4. Select 'Web application' (default option)
-5. Apply <b>http://localhost:3000/api/google/callback/oauth</b> to </b>Authorised redirect URIs</b> field (development option)
+5. Apply <b>http://localhost:3000/api/google/callback/oauth</b> to <b>Authorised redirect URIs</b> field (development option)
 6. Make sure you activate **Google Drive** & **Google People** APIs, this sample uses both scopes. Finally, take note of the    <b>client_id</b> and <b>client_secret</b>.
 
 ### Run locally
