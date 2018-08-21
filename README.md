@@ -34,7 +34,7 @@ As the data can be anywhere, and a very common scenario is to use generic data s
 
 Working on this application touch both server and client sides.  
 For <b>Basic</b> use for presentation purposes, you will need knowledge about: <b>Node.js</b>, <b>REST Api</b>, on back-end and <b>HTML</b>, <b>jQuery</b>, <b>Ajax</b> on front-end.  
-For develop more <b>complex</b> application you certainly need knowledge about: <b>Forge-SDK</b> (<b>Forsge-Api</b>), <b>Forge Derivatives-Api</b>, <b>JS Promises</b>, <b>Oauth Authentication</b>.
+For develop more <b>complex</b> application you certainly need knowledge about: <b>Forge-SDK</b> (<b>Forsge-Api</b>), <b>Forge Derivatives-Api</b>, <b>JS Promises</b>, <b>Oauth Authentication</b>, <b>Google-API</b>
 
 # Setup
 
