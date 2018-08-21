@@ -16,9 +16,19 @@ This sample use [Model Derivative API](https://developer.autodesk.com/en/docs/mo
 
 ![thumbnail](www/img/indexpage.png)
 
+## Technologies overview
+   1. <b>Languages</b>: JavaScript,
+   2. <b>Forge</b>: Viewer, Buckets-Api, Objects-Api, model-derivative
+   3. <b>Technologies/frameworks</b>: Express.js, jQuery, jstree.js, request.js, moment.js, nodemon
+   4. <b>Other APIs</b>: oAuth2, googleapis
+
 ## Live version
 
 See it live at [forgegoogledriveviewer.herokuapp.com](http://forgegoogledriveviewer.herokuapp.com/).
+
+## Industry background
+
+As the data can be anywhere, and a very common scenario is to use generic data storage, like Google Drive, to store personal or business files, share between employees and manage versions. With Forge you can view these files implementing a transparent viewing approach, as demonstrated in this sample. On specific cases, the Box connection can be replaced with other or with a company local storage.
 
 # Setup
 
@@ -102,5 +112,5 @@ Please see the [LICENSE](LICENSE) file for full details.
 
 ## Written by
 
-Augusto Goncalves (Forge Partner Development)<br />
+Augusto Goncalves, Vadym Kuzin  (Forge Partner Development)<br />
 http://forge.autodesk.com<br />
