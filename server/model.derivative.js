@@ -37,11 +37,9 @@ router.get('/md/viewerFormats', function (req, res) {
     derivative.getFormats({}, null, tokenPublic).then(function (response) {
       res.status(200).json(response.body.formats.svf);
     }).catch(function (err) {
-      console.log(err);
       res.status(500).end();
     });
   });
-  //});
 });
 
 module.exports = router;
