@@ -36,6 +36,14 @@ Working on this application touch both server and client sides.
 For <b>Basic</b> use for presentation purposes, you will need knowledge about: <b>Node.js</b>, <b>REST Api</b>, on back-end and <b>HTML</b>, <b>jQuery</b>, <b>Ajax</b> on front-end.  
 For develop more <b>complex</b> application you certainly need knowledge about: <b>Forge-SDK</b> (<b>Forsge-Api</b>), <b>Forge Derivatives-Api</b>, <b>JS Promises</b>, <b>Oauth Authentication</b>, <b>Google-API</b>
 
+# Branches and features
+
+In case if you wonder about how to get metadata or geometry data and you need quick example - you can switch from 'master' branch to one of feature branches. More details about each features read in local readme file.
+
+- features/get_meta_data - for checking small addition on UI side and new API request on server side related to getting meta data.
+
+- features/get_geometry_data - for checking addition on UI side and new API request on server side builded on top of getting meta_data solution(so maybe for better understanding check it first) and   expanded it with new functionality.
+
 # Setup
 
 For using this sample, you need an Autodesk developer credentials. Visit the [Forge Developer Portal](https://developer.autodesk.com), sign up for an account, then [create an app](https://developer.autodesk.com/myapps/create). For this new app, use <b>http://localhost:3000/api/forge/callback/oauth</b> as Callback URL. Finally take note of the <b>Client ID</b> and <b>Client Secret</b>.
