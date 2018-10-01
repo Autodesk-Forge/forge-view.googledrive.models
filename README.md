@@ -40,7 +40,7 @@ For develop more <b>complex</b> application you certainly need knowledge about: 
 
 In case if you wonder about how to get metadata or geometry data and you need quick example - you can switch from 'master' branch to one of feature branches. More details about each features read in local readme file.
 
-- features/get_meta_data - for checking small addition on UI side and new API request on server side related to getting meta data.
+- features/get_meta_data - for checking small addition on UI side and new API request on server side related to getting metadata.
 
 - features/get_geometry_data - for checking addition on UI side and new API request on server side builded on top of getting meta_data solution(so maybe for better understanding check it first) and   expanded it with new functionality.
 
