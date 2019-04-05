@@ -4,14 +4,14 @@
   "description": "Transparent use of Model Derivative to view Box compatible files.",
   "dependencies": {
     "body-parser": "*",
-    "bootstrap": "3.3.7",
+    "bootstrap": "3.4.1",
     "cookie-parser": "*",
     "express": "*",
     "express-session": "*",
     "forge-apis": "0.4.3",
     "googleapis": "19.0.0",
     "jquery": "3.2.1",
-    "jstree": "3.3.4",
+    "jstree": "3.3.7",
     "moment": "2.19.4",
     "request": "*",
     "serve-favicon": "*"

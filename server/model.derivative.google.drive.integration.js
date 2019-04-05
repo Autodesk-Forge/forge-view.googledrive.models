@@ -52,7 +52,7 @@ router.post('/integration/sendToTranslation', jsonParser, function (req, res) {
     var drive = google.drive({version: 'v2', auth: oauth2Client});
 
 
-    var people = google.people('v1', auth: oauth2Client);
+    var people = google.people({version: 'v1', auth: oauth2Client});
     people.people.get({ resourceName: 'people/me', personFields: 'emailAddresses,names' }, function (err, user) {
       if (err || user == null) {
         console.log('model.derivative.google.drive.integration:sentToTranslation:google.user.get => ' + err);
