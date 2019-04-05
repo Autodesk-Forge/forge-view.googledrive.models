@@ -52,8 +52,8 @@ router.post('/integration/sendToTranslation', jsonParser, function (req, res) {
     var drive = google.drive({version: 'v2', auth: oauth2Client});
 
 
-    var plus = google.plus('v1');
-    plus.people.get({userId: 'me', auth: oauth2Client}, function (err, user) {
+    var people = google.people('v1', auth: oauth2Client);
+    people.people.get({ resourceName: 'people/me', personFields: 'emailAddresses,names' }, function (err, user) {
       if (err || user == null) {
         console.log('model.derivative.google.drive.integration:sentToTranslation:google.user.get => ' + err);
         res.status(500).json({error: 'Cannot get Google user information, please try again.'});
@@ -62,7 +62,12 @@ router.post('/integration/sendToTranslation', jsonParser, function (req, res) {
 
       // ForgeSDK OSS Bucket Name: username + userId (no spaces, lower case)
       // that way we have one bucket for each Google account using this application
-      var ossBucketKey = config.credentials.client_id.toLowerCase() + (user.displayName.replace(/\W+/g, '') + user.id).toLowerCase();
+      var ossBucketKey = 
+          config.credentials.client_id.toLowerCase() + 
+          (
+            user.names[0].displayName.replace(/\W+/g, '') +
+            user.resourceName.split('/')[1]
+          ).toLowerCase();
 
       var buckets = new ForgeSDK.BucketsApi();
       var objects = new ForgeSDK.ObjectsApi();
