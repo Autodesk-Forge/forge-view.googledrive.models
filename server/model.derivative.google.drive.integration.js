@@ -31,7 +31,7 @@ var jsonParser = bodyParser.json();
 var config = require('./config');
 
 // google drive sdk: https://developers.google.com/drive/v3/web/quickstart/nodejs
-var google = require('googleapis');
+var {google} = require('googleapis');
 var OAuth2 = google.auth.OAuth2;
 var oauth2Client = new OAuth2(config.google.credentials.client_id, config.google.credentials.client_secret, config.google.callbackURL);
 
@@ -65,8 +65,8 @@ router.post('/integration/sendToTranslation', jsonParser, function (req, res) {
       var ossBucketKey = 
           config.credentials.client_id.toLowerCase() + 
           (
-            user.names[0].displayName.replace(/\W+/g, '') +
-            user.resourceName.split('/')[1]
+            user.data.names[0].displayName.replace(/\W+/g, '') +
+            user.data.resourceName.split('/')[1]
           ).toLowerCase();
 
       var buckets = new ForgeSDK.BucketsApi();
@@ -80,7 +80,7 @@ router.post('/integration/sendToTranslation', jsonParser, function (req, res) {
         drive.files.get({
           fileId: googleFileId
         }, function (err, fileInfo) {
-          var fileName = fileInfo.title;
+          var fileName = fileInfo.data.title;
           var ossObjectName = googleFileId + '.' + re.exec(fileName)[1]; // googleId + fileExtension (required)
 
           // at this point the bucket exists (either created or already there)

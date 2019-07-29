@@ -29,7 +29,7 @@ var router = express.Router();
 var config = require('./config');
 
 // google drive sdk: https://developers.google.com/drive/v3/web/quickstart/nodejs
-var google = require('googleapis');
+var {google} = require('googleapis');
 var OAuth2 = google.auth.OAuth2;
 var oauth2Client = new OAuth2(config.google.credentials.client_id, config.google.credentials.client_secret, config.google.callbackURL);
 
@@ -102,7 +102,7 @@ function drivePage(res, drive, folderId, npToken, first){
     pageToken: npToken
   }, function (err, lst) {
     if (err) console.log(err);
-    var items = lst.items;
+    var items = lst.data.items;
     
     items.forEach(function(item){
       var treeItem = {
