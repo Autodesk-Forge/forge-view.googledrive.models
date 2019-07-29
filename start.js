@@ -16,18 +16,34 @@
 // UNINTERRUPTED OR ERROR FREE.
 /////////////////////////////////////////////////////////////////////
 
-'use strict';
+const path = require('path');
+const express = require('express');
+const session = require('cookie-session');
 
-var app = require('./server/server');
+if (process.env.FORGE_CLIENT_ID == null || process.env.FORGE_CLIENT_SECRET == null) {
+  console.warn('*****************\nWARNING: Forge Client ID & Client Secret not defined as environment variables.\n*****************');
+  return;
+}
 
-// start server
-var server = app.listen(app.get('port'), function () {
-  if (process.env.FORGE_CLIENT_ID == null || process.env.FORGE_CLIENT_SECRET == null)
-    console.log('*****************\nWARNING: ForgeSDK Client ID & Client Secret not defined as environment variables.\n*****************');
+if (process.env.GOOGLE_CLIENT_ID == null || process.env.GOOGLE_CLIENT_SECRET == null || process.env.GOOGLE_CALLBACK_URL == null) {
+  console.warn('*****************\nWARNING: Google Client ID & Client Secret or Callback URL not defined as environment variables.\n*****************');
+  return;
+}
 
-  if (process.env.GOOGLE_CLIENT_ID == null || process.env.GOOGLE_CLIENT_SECRET == null)
-    console.log('*****************\nWARNING: Box Client ID & Client Secret not defined as environment variables.\n*****************');
+let app = express();
+app.set('port', process.env.PORT || 3000);
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  name: 'forge_session',
+  keys: ['forge_secure_key'],
+  maxAge: 14 * 24 * 60 * 60 * 1000 // 14 days, same as refresh token
+}));
+app.use(express.json({ limit: '50mb' }));
+app.use('/', require('./routes/oauth')); // redirect oauth API calls
+app.use('/', require('./routes/model.derivative.js')); // redirect Model Derivative API calls
+app.use('/', require('./routes/google.drive.tree.js')); // redirect Google Drive API calls
+app.use('/', require('./routes/model.derivative.google.drive.integration.js')); // redirect integration API calls
 
-  console.log('Starting at ' + (new Date()).toString());
-  console.log('Server listening on port ' + server.address().port);
+app.listen(app.get('port'), function () {
+  console.log('Server listening on port ' + app.get('port'));
 });

@@ -4,17 +4,13 @@
   "description": "Transparent use of Model Derivative to view Box compatible files.",
   "dependencies": {
     "body-parser": "*",
-    "bootstrap": "3.4.1",
     "cookie-parser": "*",
+    "cookie-session": "^1.3.3",
     "express": "*",
     "express-session": "*",
     "forge-apis": "0.4.3",
     "googleapis": "^41.0.1",
-    "jquery": "^3.4.1",
-    "jstree": "3.3.7",
-    "moment": "2.19.4",
-    "request": "*",
-    "serve-favicon": "*"
+    "request": "*"
   },
   "repository": {
     "type": "git",
@@ -23,7 +19,7 @@
   "scripts": {
     "start": "NODE_ENV=production node start.js",
     "dev": "node start.js",
-    "nodemon": "nodemon start.js --ignore www/"
+    "nodemon": "nodemon start.js --ignore public/"
   },
   "author": "Vadym Kuzin (Forge Partner Development)",
   "license": "MIT"
