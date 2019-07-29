@@ -16,58 +16,38 @@
 // UNINTERRUPTED OR ERROR FREE.
 /////////////////////////////////////////////////////////////////////
 
-// This script file is based on the tutorial:
-// https://developer.autodesk.com/en/docs/viewer/v2/tutorials/basic-application/
-
-
-var viewerApp;
-
-function getForgeToken(callback) {
-  jQuery.ajax({
-    url: '/oauth/token',
-    success: function (oauth) {
-      if (oauth.access_token != '') console.log('2 legged token (App level public token): ' + oauth.access_token); // debug
-      if (callback)
-        callback(oauth.access_token, oauth.expires_in);
-    }
-  });
+async function getForgeToken(callback) {
+  const resp = await fetch('/oauth/token');
+  if (!resp.ok) {
+    const msg = await resp.text();
+    console.error('Could not obtain access token', msg);
+    return;
+  }
+  const credentials = await resp.json();
+  callback(credentials.access_token, credentials.expires_in)
 }
 
 function launchViewer(urn) {
-  var options = {
+  const options = {
     env: 'AutodeskProduction',
     getAccessToken: getForgeToken
-
   };
-  var documentId = 'urn:' + urn;
-  Autodesk.Viewing.Initializer(options, function onInitialized() {
-    viewerApp = new Autodesk.Viewing.ViewingApplication('forgeViewer');
-    viewerApp.registerViewer(viewerApp.k3D, Autodesk.Viewing.Private.GuiViewer3D);
-    viewerApp.loadDocument(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
+  Autodesk.Viewing.Initializer(options, function () {
+    viewer = new Autodesk.Viewing.Private.GuiViewer3D(document.getElementById('forgeViewer'), {});
+    viewer.start();
+    loadDocument('urn:' + urn);
   });
 }
 
-function onDocumentLoadSuccess(doc) {
-
-  // We could still make use of Document.getSubItemsWithProperties()
-  // However, when using a ViewingApplication, we have access to the **bubble** attribute,
-  // which references the root node of a graph that wraps each object from the Manifest JSON.
-  var viewables = viewerApp.bubble.search({ 'type': 'geometry' });
-  if (viewables.length === 0) {
-    console.error('Document contains no viewables.');
-    return;
-  }
-
-  // Choose any of the avialble viewables
-  viewerApp.selectItem(viewables[0].data, onItemLoadSuccess, onItemLoadFail);
-}
-
-function onDocumentLoadFailure(viewerErrorCode) {
-}
-
-function onItemLoadSuccess(viewer, item) {
-}
-
-function onItemLoadFail(errorCode) {
-  console.log(errorCode);
+function loadDocument(documentId) {
+  Autodesk.Viewing.Document.load(
+    documentId,
+    function onSuccess(doc) {
+      const defaultGeom = doc.getRoot().getDefaultGeometry();
+      viewer.loadDocumentNode(doc, defaultGeom);
+    },
+    function onError(err) {
+      console.error(err);
+    }
+  );
 }
