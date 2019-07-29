@@ -66,6 +66,7 @@ Mac OSX/Linux (Terminal)
     export FORGE_CLIENT_SECRET=<<YOUR FORGE CLIENT SECRET>>
     export GOOGLE_CLIENT_ID=<<YOUR CLIENT ID FROM GOOGLE DEVELOPER>>
     export GOOGLE_CLIENT_SECRET=<<YOUR GOOGLE CLIENT SECRET>>
+    export GOOGLE_CALLBACK_URL=<<YOUR GOOGLE CALLBACK URL>>
     npm run dev
 
 Windows (use <b>Node.js command line</b> from Start menu)
@@ -75,6 +76,7 @@ Windows (use <b>Node.js command line</b> from Start menu)
     set FORGE_CLIENT_SECRET=<<YOUR FORGE CLIENT SECRET>>
     set GOOGLE_CLIENT_ID=<<YOUR CLIENT ID FROM GOOGLE DEVELOPER>>
     set GOOGLE_CLIENT_SECRET=<<YOUR GOOGLE CLIENT SECRET>>
+    set GOOGLE_CALLBACK_URL=<<YOUR GOOGLE CALLBACK URL>>
     npm run dev
 
 Open the browser: [http://localhost:3000](http://localhost:3000).
