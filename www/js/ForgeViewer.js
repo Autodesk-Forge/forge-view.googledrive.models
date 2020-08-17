@@ -1,6 +1,6 @@
-/////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
-// Written by ForgeSDK Partner Development
+// Written by Forge Partner Development
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted,
@@ -16,58 +16,37 @@
 // UNINTERRUPTED OR ERROR FREE.
 /////////////////////////////////////////////////////////////////////
 
-// This script file is based on the tutorial:
-// https://developer.autodesk.com/en/docs/viewer/v2/tutorials/basic-application/
-
-
-var viewerApp;
-
-function getForgeToken(callback) {
-  jQuery.ajax({
-    url: '/oauth/token',
-    success: function (oauth) {
-      if (oauth.access_token != '') console.log('2 legged token (App level public token): ' + oauth.access_token); // debug
-      if (callback)
-        callback(oauth.access_token, oauth.expires_in);
-    }
-  });
-}
+var viewer;
 
 function launchViewer(urn) {
   var options = {
     env: 'AutodeskProduction',
     getAccessToken: getForgeToken
-
   };
-  var documentId = 'urn:' + urn;
-  Autodesk.Viewing.Initializer(options, function onInitialized() {
-    viewerApp = new Autodesk.Viewing.ViewingApplication('forgeViewer');
-    viewerApp.registerViewer(viewerApp.k3D, Autodesk.Viewing.Private.GuiViewer3D);
-    viewerApp.loadDocument(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
+
+  Autodesk.Viewing.Initializer(options, () => {
+    viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'));
+    viewer.start();
+    var documentId = 'urn:' + urn;
+    Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
   });
 }
 
 function onDocumentLoadSuccess(doc) {
-
-  // We could still make use of Document.getSubItemsWithProperties()
-  // However, when using a ViewingApplication, we have access to the **bubble** attribute,
-  // which references the root node of a graph that wraps each object from the Manifest JSON.
-  var viewables = viewerApp.bubble.search({ 'type': 'geometry' });
-  if (viewables.length === 0) {
-    console.error('Document contains no viewables.');
-    return;
-  }
-
-  // Choose any of the avialble viewables
-  viewerApp.selectItem(viewables[0].data, onItemLoadSuccess, onItemLoadFail);
+  var viewables = doc.getRoot().getDefaultGeometry();
+  viewer.loadDocumentNode(doc, viewables).then(i => {
+    // documented loaded, any action?
+  });
 }
 
 function onDocumentLoadFailure(viewerErrorCode) {
+  console.error('onDocumentLoadFailure() - errorCode:' + viewerErrorCode);
 }
 
-function onItemLoadSuccess(viewer, item) {
-}
-
-function onItemLoadFail(errorCode) {
-  console.log(errorCode);
+function getForgeToken(callback) {
+  fetch('/oauth/token').then(res => {
+    res.json().then(data => {
+      callback(data.access_token, data.expires_in);
+    });
+  });
 }

@@ -31,7 +31,7 @@ var jsonParser = bodyParser.json();
 var config = require('./config');
 
 // google drive sdk: https://developers.google.com/drive/v3/web/quickstart/nodejs
-var google = require('googleapis');
+const {google} = require('googleapis');
 var OAuth2 = google.auth.OAuth2;
 var oauth2Client = new OAuth2(config.google.credentials.client_id, config.google.credentials.client_secret, config.google.callbackURL);
 
