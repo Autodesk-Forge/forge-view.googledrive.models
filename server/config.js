@@ -38,7 +38,7 @@ module.exports = {
 
   // google configuration
   google: {
-    callbackURL: process.env.GOOGLE_CALLBACK_URL,
+    callbackURL: "http://localhost:3000/api/google/callback/oauth",
     credentials: {
       client_id: process.env.GOOGLE_CLIENT_ID,
       client_secret: process.env.GOOGLE_CLIENT_SECRET
