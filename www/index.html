@@ -1,49 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-  <meta charset="UTF-8">
-  <title>Autodesk Forge Integration with Google Drive</title>
-  <!-- Common packages: JQuery & Bootstrap -->
-  <link rel="stylesheet" href="/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/css/jstree/style.css"/>
-  <script language="JavaScript" src="/js/jquery.min.js"></script>
-  <script language="JavaScript" src="/js/bootstrap.min.js"></script>
-  <script language="JavaScript" src="/js/jstree.min.js"></script>
+  <title>Autodesk Forge Tutorial</title>
+  <meta charset="utf-8" />
+  <link rel="shortcut icon" href="https://github.com/Autodesk-Forge/learn.forge.viewmodels/raw/master/img/favicon.ico">
+  <!-- Common packages: jQuery, Bootstrap, jsTree -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/jstree.min.js"></script>
   <script language="JavaScript" src="/js/moment.min.js"></script>
   <script language="JavaScript" src="/js/notify.min.js"></script>
-  <!-- Autodesk ForgeSDK Viewer files -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/themes/default/style.min.css" />
+  <!-- Autodesk Forge Viewer files -->
   <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.min.css" type="text/css">
   <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js"></script>
-  <!-- this project main script -->
-  <link rel="shortcut icon" href=/img/favicon.ico type=image/x-icon>
-  <link rel="stylesheet" href="/css/main.css"/>
+  <!-- this project files -->
+  <link href="css/main.css" rel="stylesheet" />
   <script language="JavaScript" src="/js/ForgeViewer.js"></script>
   <script language="JavaScript" src="/js/google.js"></script>
+<!--Chart JS  packages-->
+<script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" ></script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" />
+
+
 </head>
+
 <body>
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-sm-4">
-      <div class="panel panel-default">
-        <div class="panel-heading" data-toggle="tooltip">Google Drive
-          <button id="loginGoogle" class="btn btn-xs btn-default" style="float:right;">
-            <img src="img/google-logo.png" height="14" sstyle="vertical-align: top;"/> Account
-          </button>
-          <img src="/img/refresh.png" id="refreshGoogleDriveTree" style="vertical-align: top; cursor: pointer" title="Refresh Google Drive files" height="20"/>
-        </div>
-        <div id="myGoogleDriveFiles" class="foldertree">
+  <!-- Fixed navbar by Bootstrap: https://getbootstrap.com/examples/navbar-fixed-top/ -->
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+      <ul class="nav navbar-nav left">
+        <li>
+          <a href="http://developer.autodesk.com" target="_blank">
+            <img alt="Autodesk Forge" src="//developer.static.autodesk.com/images/logo_forge-2-line.png" height="20">
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <!-- End of navbar -->
+  <div class="container-fluid fill">
+    <div class="row fill">
+      <div class="col-sm-3 fill">
+        <div class="panel panel-default fill">
+          <div class="panel-heading" data-toggle="tooltip">
+            Google Drive <img src="/img/refresh.png" id="refreshGoogleDriveTree" style="vertical-align: top; cursor: pointer" title="Refresh Google Drive files" height="20"/>
+          </div>
+          <div id="myGoogleDriveFiles" class="foldertree"></div>
         </div>
       </div>
-    </div>
-    <div class="col-sm-8">
-      <div id="forgeViewer" class="forgeViewer"></div>
+      <div class="col-sm-9 fill">
+        <button id="loginGoogle" class="btn btn-xs btn-default">
+          <img src="img/google-logo.png" height="40" sstyle="vertical-align: top;"/> Account
+        </button>
+        <div id="forgeViewer" class="forgeViewer"></div>
+      </div>
     </div>
   </div>
-</div>
-<footer class="footer">
-  <a href="./privacy.html">Privacy Policy</a>&nbsp;|&nbsp; <a href="./terms.html">Terms of Service</a>&nbsp;|&nbsp;
-  <span><a href="http://developer.autodesk.com"><img src="img/autodesk-logo.png" alt="Autodesk" height="16"> Autodesk <img src="img/autodesk-forge.png" alt="Forge" height="20">Forge</a></span>
-  <div style="float:right;"><img src="/img/github-logo.png" height="20"/> <a href="https://github.com/Autodesk-forge/model.derivative-nodejs-google.drive.viewer">Source code</a></div>
-</footer>
+  <footer class="footer">
+    <a href="./privacy.html">Privacy Policy</a>&nbsp;|&nbsp; <a href="./terms.html">Terms of Service</a>&nbsp;|&nbsp;
+    <span><a href="http://developer.autodesk.com"><img src="img/autodesk-logo.png" alt="Autodesk" height="16"> Autodesk <img src="img/autodesk-forge.png" alt="Forge" height="20">Forge</a></span>
+    <div style="float:right;"><img src="/img/github-logo.png" height="20"/> <a href="https://github.com/Autodesk-forge/model.derivative-nodejs-google.drive.viewer">Source code</a></div>
+  </footer>
 </body>
+
 </html>

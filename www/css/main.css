@@ -1,14 +1,42 @@
-
-html {
-    position: relative;
+html, body{
     min-height: 100%;
-}
-
-body {
-    padding-top: 20px; /* space for the top nav bar */
-    margin-bottom: 60px; /* Margin bottom by footer height */
+    height: 100%;
+  }
+  
+  .fill{
+    height: calc(100vh - 100px);
+  }
+  
+  body {
+    padding-top: 60px; /* space for the top nav bar */
     margin-right: 30px;
-}
+  }
+  
+  #appBuckets {
+    overflow: auto;
+    width: 100%;
+    height: calc(100vh - 150px);
+  }
+  
+  #forgeViewer {
+    width: 100%;
+  }
+  
+  #dashboard{
+    overflow: auto;
+    height: calc(100vh - 100px);
+  }
+  
+  .transition-width {
+    transition: width 1s ease-in-out;
+  }
+  
+  .dashboardPanel {
+    width: 100%;
+    padding: 3%;
+    display: block;
+  }
+  
 
 .footer {
     position: absolute;
@@ -34,8 +62,4 @@ img.gray:hover {
     filter: none;
     -webkit-filter: grayscale(0);
 }
-
-div.forgeViewer {
-    height: 540px;
-    width: 100%;
-}
+#loginGoogle{font-size: 1.7em;padding: 7px;}

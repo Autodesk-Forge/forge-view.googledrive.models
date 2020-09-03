@@ -94,17 +94,17 @@ function prepareGoogleTree() {
 function translateFile(googleNode) {
   var extension = (re.exec(googleNode.text)[1]);
   if (!extension){
-    $.notify('Sorry, we cannot view files without extension', 'warn');
+    $.notify('Sorry, we cannot view files without extension', 'warn', {position:"middle center"});
     return;
   }
 
   isFileSupported(googleNode.text, function (supported) {
     if (!supported) {
-      $.notify('File "' + googleNode.text + '" cannot be viewed, format not supported.', 'warn');
+      $.notify('File "' + googleNode.text + '" cannot be viewed, format not supported.', 'warn', {position:"middle center"});
       return;
     }
 
-    $.notify('Preparing to view "' + googleNode.text + '", please wait...', 'info');
+    $.notify('Preparing to view "' + googleNode.text + '", please wait...', 'info', {position:"middle center"});
 
     jQuery.ajax({
       url: '/integration/sendToTranslation',
@@ -115,7 +115,7 @@ function translateFile(googleNode) {
         'googlefile': googleNode.id
       }),
       success: function (res) {
-        $.notify(res.status + (res.readyToShow ? ' Launching viewer.' : ''), 'info');
+        $.notify(res.status + (res.readyToShow ? ' Launching viewer.' : ''), 'info', {position:"middle center"});
         if (res.readyToShow)
           launchViewer(res.urn); // ready to show! launch viewer
         else
@@ -123,7 +123,7 @@ function translateFile(googleNode) {
       },
       error: function (res) {
         res = JSON.parse(res.responseText);
-        $.notify(res.error, 'error');
+        $.notify(res.error, 'error', {position:"middle center"});
       }
     });
 
@@ -142,17 +142,17 @@ function wait(urn) {
       }),
       success: function (res) {
         if (res.readyToShow) {
-          $.notify('Ready! Launching viewer.', 'info');
+          $.notify('Ready! Launching viewer.', 'info', {position:"middle center"});
           launchViewer(res.urn);
         }
         else {
-          $.notify(res.status, 'warn');
+          $.notify(res.status, 'warn', {position:"middle center"});
           wait(res.urn);
         }
       },
       error: function (res) {
         res = JSON.parse(res.responseText);
-        $.notify(res.error, 'error');
+        $.notify(res.error, 'error', {position:"middle center"});
       }
     });
   }, 5000);
@@ -169,10 +169,10 @@ function googleCustomMenu(googleNode) {
         action: function () {
           isFileSupported(googleNode.text, function (supported) {
             if (supported) {
-              $.notify('Sorry, not implemented on this sample (WIP)', 'error');
+              $.notify('Sorry, not implemented on this sample (WIP)', 'error', {position:"middle center"});
             }
             else
-              $.notify('Cannot extract OBJ, format not supported.', 'error');
+              $.notify('Cannot extract OBJ, format not supported.', 'error', {position:"middle center"});
           });
         }
       }

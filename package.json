@@ -13,6 +13,7 @@
     "jquery": "^3.5.1",
     "jstree": "^3.3.10",
     "moment": "^2.27.0",
+    "nodemon": "^2.0.4",
     "request": "^2.88.2",
     "serve-favicon": "^2.5.0"
   },
