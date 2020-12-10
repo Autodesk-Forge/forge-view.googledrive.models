@@ -49,9 +49,9 @@ router.post('/integration/sendToTranslation', jsonParser, function (req, res) {
     oauth2Client.setCredentials({
       access_token: tokenSession.getGoogleToken()
     });
-    var drive = google.drive({version: 'v2', auth: oauth2Client});
+    var drive = google.drive({version: 'v3', auth: oauth2Client});
 
-
+    /*
     var people = google.people({version: 'v1', auth: oauth2Client});
     people.people.get({ resourceName: 'people/me', personFields: 'emailAddresses,names' }, function (err, user) {
       if (err || user == null) {
@@ -59,29 +59,30 @@ router.post('/integration/sendToTranslation', jsonParser, function (req, res) {
         res.status(500).json({error: 'Cannot get Google user information, please try again.'});
         return;
       }
-
+      */
       // ForgeSDK OSS Bucket Name: username + userId (no spaces, lower case)
       // that way we have one bucket for each Google account using this application
-      var ossBucketKey = 
-          config.credentials.client_id.toLowerCase() + 
-          (
-            user.names[0].displayName.replace(/\W+/g, '') +
-            user.resourceName.split('/')[1]
-          ).toLowerCase();
+      var ossBucketKey = config.credentials.client_id.toLowerCase()
+          //  + 
+          // (
+          //   user.names[0].displayName.replace(/\W+/g, '') +
+          //   user.resourceName.split('/')[1]
+          // ).toLowerCase();
 
       var buckets = new ForgeSDK.BucketsApi();
       var objects = new ForgeSDK.ObjectsApi();
       var postBuckets = new ForgeSDK.PostBucketsPayload();
       postBuckets.bucketKey = ossBucketKey;
       postBuckets.policyKey = "transient"; // expires in 24h
-
+      var ossObjectName;
       buckets.createBucket(postBuckets, {}, null, tokenInternal).catch(function (err) {console.log(err);}).then(function () {
         // need the Google file information to get the name...
         drive.files.get({
           fileId: googleFileId
         }, function (err, fileInfo) {
-          var fileName = fileInfo.title;
-          var ossObjectName = googleFileId + '.' + re.exec(fileName)[1]; // googleId + fileExtension (required)
+          var fileName = fileInfo.data.name;
+          // var ossObjectName = googleFileId + '.' + re.exec(fileName)[1]; // googleId + fileExtension (required)
+          ossObjectName = fileName; // googleId + fileExtension (required)
 
           // at this point the bucket exists (either created or already there)
           objects.getObjects(ossBucketKey, {'limit': 100}, null, tokenInternal).then(function (response) {
@@ -113,7 +114,7 @@ router.post('/integration/sendToTranslation', jsonParser, function (req, res) {
                */
 
               request({
-                url: 'https://www.googleapis.com/drive/v2/files/' + googleFileId + '?alt=media',
+                url: 'https://www.googleapis.com/drive/v3/files/' + googleFileId + '?alt=media',
                 method: "GET",
                 headers: {
                   'Authorization': 'Bearer ' + tokenSession.getGoogleToken(),
@@ -141,7 +142,7 @@ router.post('/integration/sendToTranslation', jsonParser, function (req, res) {
       });
     });
   });
-});
+// });
 
 router.post('/integration/isReadyToShow', jsonParser, function (req, res) {
   var ossUrn = req.body.urn;

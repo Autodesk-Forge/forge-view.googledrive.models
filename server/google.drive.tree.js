@@ -102,7 +102,7 @@ function drivePage(res, drive, folderId, npToken, first){
     pageToken: npToken
   }, function (err, lst) {
     if (err) console.log(err);
-    var items = lst.items;
+    var items = lst.data.items;
     
     items.forEach(function(item){
       var treeItem = {
