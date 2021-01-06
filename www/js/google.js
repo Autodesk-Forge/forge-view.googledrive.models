@@ -143,6 +143,7 @@ function wait(urn) {
       success: function (res) {
         if (res.readyToShow) {
           $.notify('Ready! Launching viewer.', 'info', {position:"middle center"});
+          $('.information').hide();
           launchViewer(res.urn);
         }
         else {
